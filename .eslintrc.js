@@ -1,13 +1,23 @@
+'use strict';
+
 module.exports = {
   root: true,
+  parser: 'babel-eslint',
   parserOptions: {
     ecmaVersion: 2018,
-    sourceType: "module"
+    sourceType: 'module',
+    ecmaFeatures: {
+      legacyDecorators: true,
+    },
   },
-  plugins: ["ember"],
-  extends: ["eslint:recommended"],
+  plugins: ['ember'],
+  extends: [
+    'eslint:recommended',
+    'plugin:ember/recommended',
+    'plugin:prettier/recommended',
+  ],
   env: {
-    browser: true
+    browser: true,
   },
   rules: {
     camelcase: 0,
@@ -19,53 +29,34 @@ module.exports = {
     "arrow-parens": 0,
     "no-unused-vars": ["error", { args: "none" }]
   },
-  globals: {
-    server: true
-  },
   overrides: [
     // node files
     {
       files: [
-        ".template-lintrc.js",
-        "ember-cli-build.js",
-        "index.js",
-        "testem.js",
-        "blueprints/*/index.js",
-        "config/**/*.js",
-        "tests/dummy/config/**/*.js",
-        "fastboot-tests/**/*.js"
-      ],
-      excludedFiles: [
-        "addon/**",
-        "addon-test-support/**",
-        "app/**",
-        "tests/dummy/app/**"
+        './.eslintrc.js',
+        './.prettierrc.js',
+        './.template-lintrc.js',
+        './ember-cli-build.js',
+        './index.js',
+        './testem.js',
+        './blueprints/*/index.js',
+        './config/**/*.js',
+        './tests/dummy/config/**/*.js',
       ],
       parserOptions: {
-        sourceType: "script",
-        ecmaVersion: 2018
+        sourceType: 'script',
       },
       env: {
         browser: false,
-        node: true
+        node: true,
       },
-      plugins: ["node"],
-      rules: Object.assign(
-        {},
-        require("eslint-plugin-node").configs.recommended.rules,
-        {
-          // add your custom rules and overrides for node files here
-        }
-      )
+      plugins: ['node'],
+      extends: ['plugin:node/recommended'],
     },
-
-    // test files. Can remove when we upgrade tests to new style.
     {
-      files: ["tests/**/*.js"],
-      excludedFiles: ["tests/dummy/**/*.js"],
-      env: {
-        embertest: true
-      }
-    }
-  ]
+      // Test files:
+      files: ['tests/**/*-test.{js,ts}'],
+      extends: ['plugin:qunit/recommended'],
+    },
+  ],
 };
