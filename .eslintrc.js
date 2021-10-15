@@ -14,11 +14,21 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:ember/recommended',
+    'plugin:prettier/recommended',
   ],
   env: {
     browser: true,
   },
-  rules: {},
+  rules: {
+    camelcase: 0,
+    "object-curly-spacing": 0,
+    quotes: 0,
+    "array-bracket-spacing": 0,
+    "no-var": 0,
+    "object-shorthand": 0,
+    "arrow-parens": 0,
+    "no-unused-vars": ["error", { args: "none" }]
+  },
   overrides: [
     // node files
     {
@@ -32,11 +42,6 @@ module.exports = {
         './blueprints/*/index.js',
         './config/**/*.js',
         './tests/dummy/config/**/*.js',
-        './fastboot-tests/included-files-test.js',
-        './test-projects/*/ember-cli-build.js',
-        './test-projects/*/testem.js',
-        './test-projects/*/config/**/*.js',
-        './test-projects/*/fastboot-tests/**/*.js',
       ],
       parserOptions: {
         sourceType: 'script',
@@ -47,6 +52,11 @@ module.exports = {
       },
       plugins: ['node'],
       extends: ['plugin:node/recommended'],
+    },
+    {
+      // Test files:
+      files: ['tests/**/*-test.{js,ts}'],
+      extends: ['plugin:qunit/recommended'],
     },
   ],
 };

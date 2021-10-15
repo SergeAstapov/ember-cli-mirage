@@ -1,10 +1,11 @@
 ---
 language: node_js
 node_js:
-  - "10"
+  # we recommend testing addons with the same minimum supported node version as Ember CLI
+  # so that your addon works for all apps
+  - "12"
 
-sudo: false
-dist: trusty
+dist: xenial
 
 addons:
   chrome: stable
@@ -17,8 +18,11 @@ env:
     # See https://git.io/vdao3 for details.
     - JOBS=1
 
-install:
-  - yarn install --no-lockfile --non-interactive
+branches:
+  only:
+    - master
+    # npm version tags
+    - /^v\d+\.\d+\.\d+/
 
 notifications:
   email: false
@@ -34,30 +38,40 @@ before_deploy: |
   }
 
 jobs:
-  fail_fast: true
+  fast_finish: true
+  allow_failures:
+    - env: EMBER_TRY_SCENARIO=ember-canary
 
   include:
-    - stage: locked dependencies
-      env: NAME=browser tests
-      install: yarn install
-      script: yarn test:browser
-    - env: NAME=node tests
-      install: yarn install
+    # runs linting and tests with current locked deps
+    - stage: "Tests"
+      name: "Tests"
+      script:
+        - yarn lint
+        - yarn test:ember
+
+    - stage: "Node Tests"
+      name: "Node Tests"
       script: yarn test:test-projects
 
-    - stage: floating dependencies
-      env: NAME=browser tests
-      script: yarn test:browser
-    - env: NAME=node tests
-      script: yarn test:test-projects
+    - stage: "Additional Tests"
+      name: "Floating Dependencies"
+      install:
+        - yarn install --no-lockfile --non-interactive
+      script:
+        - yarn test:ember
 
-    - stage: versioned tests
-      env: EMBER_TRY_SCENARIO=ember-lts-3.20
+    # we recommend new addons test the current and previous LTS
+    # as well as latest stable release (bonus points to beta/canary)
+    - env: EMBER_TRY_SCENARIO=ember-lts-3.20
+    - env: EMBER_TRY_SCENARIO=ember-lts-3.24
     - env: EMBER_TRY_SCENARIO=ember-release
     - env: EMBER_TRY_SCENARIO=ember-beta
     - env: EMBER_TRY_SCENARIO=ember-canary
-    - env: EMBER_TRY_SCENARIO=ember-default
     - env: EMBER_TRY_SCENARIO=ember-default-with-jquery
+    - env: EMBER_TRY_SCENARIO=ember-classic
+    - env: EMBER_TRY_SCENARIO=embroider-safe
+    - env: EMBER_TRY_SCENARIO=embroider-optimized
 
     - stage: deploy
       if: (branch = master OR tag IS present) AND type = push
@@ -77,9 +91,9 @@ jobs:
           tags: true
           repo: miragejs/ember-cli-mirage
 
-  allow_failures:
-    - env: EMBER_TRY_SCENARIO=ember-beta
-    - env: EMBER_TRY_SCENARIO=ember-canary
+before_install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash
+  - export PATH=$HOME/.yarn/bin:$PATH
 
 script:
   - node_modules/.bin/ember try:one $EMBER_TRY_SCENARIO

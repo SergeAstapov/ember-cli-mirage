@@ -2,7 +2,5 @@
 
 module.exports = {
   extends: 'recommended',
-  rules: {
-    'block-indentation': false
-  },
+  singleQuote: true,
 };
