@@ -1,9 +1,10 @@
 ---
 language: node_js
 node_js:
-  - "12"
+  - "6"
 
-dist: xenial
+sudo: false
+dist: trusty
 
 addons:
   chrome: stable
@@ -25,4 +26,4 @@ install:
 
 script:
   - yarn lint:js
-  - yarn test:ember
+  - yarn test

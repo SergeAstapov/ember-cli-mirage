@@ -28,12 +28,5 @@ module.exports = function (defaults) {
     or app's build file.
   */
 
-  const { maybeEmbroider } = require('@embroider/test-setup');
-  return maybeEmbroider(app, {
-    skipBabel: [
-      {
-        package: 'qunit',
-      },
-    ],
-  });
+  return app.toTree();
 };
