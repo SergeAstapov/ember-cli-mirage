@@ -25,8 +25,12 @@
   },
   "scripts": {
     "build": "ember build",
+    "lint": "npm-run-all --aggregate-output --continue-on-error --parallel \"lint:!(fix)\"",
+    "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
     "lint:hbs": "ember-template-lint .",
-    "lint:js": "eslint .",
+    "lint:hbs:fix": "ember-template-lint . --fix",
+    "lint:js": "eslint . --cache",
+    "lint:js:fix": "eslint . --fix",
     "start": "ember serve",
     "test": "ember test",
     "test:all": "ember try:each",
@@ -49,6 +53,9 @@
   "devDependencies": {
     "@ember/jquery": "^1.1.0",
     "@ember/optional-features": "^2.0.0",
+    "@ember/test-helpers": "^2.6.0",
+    "@glimmer/component": "^1.0.4",
+    "@glimmer/tracking": "^1.0.4",
     "babel-eslint": "^10.0.3",
     "broccoli-asset-rev": "^3.0.0",
     "ember-ajax": "^5.0.0",
@@ -60,7 +67,6 @@
     "ember-cli-deploy-build": "^2.0.0",
     "ember-cli-deploy-git": "^1.3.3",
     "ember-cli-deploy-git-ci": "^1.0.1",
-    "ember-cli-eslint": "^5.1.0",
     "ember-cli-fastboot": "^2.0.4",
     "ember-cli-favicon": "^2.0.0",
     "ember-cli-htmlbars": "^5.3.1",
@@ -73,22 +79,26 @@
     "ember-disable-prototype-extensions": "^1.1.3",
     "ember-export-application-global": "^2.0.0",
     "ember-load-initializers": "^2.0.0",
-    "ember-maybe-import-regenerator-for-testing": "^1.0.0",
+    "ember-maybe-import-regenerator": "^1.0.0",
     "ember-moment": "^8.0.0",
-    "ember-qunit": "^4.6.0",
+    "ember-qunit": "^5.1.5",
     "ember-resolver": "^8.0.2",
     "ember-source": "~3.26.1",
     "ember-source-channel-url": "^3.0.0",
+    "ember-template-lint": "^3.14.0",
     "ember-try": "^1.0.0",
     "escape-string-regexp": "^4.0.0",
+    "eslint": "^7.32.0",
     "eslint-plugin-ember": "^8.1.0",
-    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-node": "^11.1.0",
     "faker": "^5.1.0",
     "fastboot": "^3.0.2",
     "js-yaml": "^4.0.0",
     "jsdom": "^16.2.2",
     "loader.js": "^4.7.0",
-    "qunit-dom": "^1.1.0"
+    "npm-run-all": "^4.1.5",
+    "qunit": "^2.17.2",
+    "qunit-dom": "^2.0.0"
   },
   "resolutions": {
     "favicons": "5.3.0",
@@ -98,15 +108,6 @@
   "engines": {
     "node": ">= 10.*"
   },
-  "ember-addon": {
-    "configPath": "tests/dummy/config",
-    "before": [
-      "ember-cli-babel"
-    ],
-    "after": [
-      "ember-qunit"
-    ]
-  },
   "changelog": {
     "labels": {
       "Breaking": "💥 Breaking Change",
@@ -115,5 +116,17 @@
       "documentation": "📝 Documentation",
       "internal": "🏠 Internal"
     }
+  },
+  "ember": {
+    "edition": "classic"
+  },
+  "ember-addon": {
+    "configPath": "tests/dummy/config",
+    "before": [
+      "ember-cli-babel"
+    ],
+    "after": [
+      "ember-qunit"
+    ]
   }
 }

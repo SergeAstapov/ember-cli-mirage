@@ -1,29 +1,34 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
-export default Controller.extend({
+export default class extends Controller {
 
-  store: service(),
+  @service store;
 
-  actions: {
-    createUser() {
-      let name = this.get('newName');
+  @action createUser (event) {
+    event.preventDefault();
 
-      this.get('store')
-        .createRecord('user', { name })
-        .save()
-        .then(() => {
-          this.set('newName', '');
-        });
-    },
+    let name = this.newName;
 
-    updateUser(user) {
-      user.save();
-    },
-
-    deleteUser(user) {
-      user.destroyRecord();
-    }
+    this.store
+      .createRecord('user', { name })
+      .save()
+      .then(() => {
+        this.set('newName', '');
+      });
   }
 
-});
+  @action updateUser (user, event) {
+    event.preventDefault();
+
+    user.save();
+  }
+
+  @action deleteUser (user, event) {
+    event.preventDefault();
+
+    user.destroyRecord();
+  }
+
+}
