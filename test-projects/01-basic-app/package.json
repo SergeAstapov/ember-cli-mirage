@@ -20,8 +20,8 @@
   "devDependencies": {
     "@ember/jquery": "*",
     "@ember/test-helpers": "*",
+    "@glimmer/tracking": "*",
     "broccoli-asset-rev": "*",
-    "ember-ajax": "*",
     "ember-auto-import": "*",
     "ember-cli": "*",
     "ember-cli-babel": "*",
@@ -34,6 +34,7 @@
     "ember-cli-uglify": "*",
     "ember-data": "*",
     "ember-export-application-global": "*",
+    "ember-fetch": "*",
     "ember-load-initializers": "*",
     "ember-maybe-import-regenerator": "*",
     "ember-qunit": "*",
@@ -50,5 +51,8 @@
   },
   "engines": {
     "node": ">= 8.*"
+  },
+  "volta": {
+    "extends": "../../package.json"
   }
 }
